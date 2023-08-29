@@ -1,24 +1,61 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import SearchBar from "./searchBox/SearchBar";
+import Main from "./chart/Main";
+import PriceSelector from "./priceSelector/PriceSelector";
+import {
+  Box,
+  Paper,
+  Table,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableCell
+} from "@mui/material";
+import DateRangeLabelGenerator from "./dateRangeSelector/DateRangeSelector";
 
 function App() {
+  const [stocksList, setStocksList] = useState<any>([]);
+  const [price, setPrice] = useState<any>("");
+  const [dateRange, setDateRange] = useState<string[]>([]);
+
+  const stock = (data: any) => {
+    setStocksList([...data]);
+  };
+
+  const priceRange = (data: any) => {
+    setPrice(data);
+  };
+
+  const datePicker = (data: any) => {
+    setDateRange(data);
+    console.log("date : ", data);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {/* <h1>Stock Market Application</h1> */}
+
+      <TableContainer component={Paper} sx={{bgcolor:'#eee'}} >
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell align="left">
+                <SearchBar stock={stock} />
+              </TableCell>
+              <TableCell align="center">
+                <PriceSelector priceRange={priceRange} />
+              </TableCell>
+              <TableCell align="center">
+                <DateRangeLabelGenerator datePicker={datePicker} />
+              </TableCell>
+            </TableRow>
+          </TableHead>
+        </Table>
+      </TableContainer>
+
+      <div className="container">
+        <Main stocksList={stocksList} price={price} dateRange={dateRange} />
+      </div>
     </div>
   );
 }
